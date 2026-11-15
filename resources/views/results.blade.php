@@ -124,7 +124,7 @@ main { flex: 1; padding-bottom: 60px; }
             <span>{{ $type === 'current' ? 'الدورة المعتادة:' : 'الدورة المقترحة:' }}</span>
             <strong>
               @forelse ($strategy->crops as $crop)
-                {{ $crop->name }}
+                {{ $crop->name_ar }}
                 @if (!$loop->last)
                   <span class="cycle-arrow">←</span>
                 @endif

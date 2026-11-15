@@ -8,17 +8,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Crop extends Model
 {
-    protected $guarded = [];
     protected $fillable = [
-    'name', 
-    'botanical_family', 
-    'water_demand', 
-    'is_nitrogen_fixer', 
-    'is_cover_crop', 
-    'root_depth', 
-    'forage_or_market_value', 
-    'profitability'
-];
+        'name',
+        'name_ar',
+        'botanical_family',
+        'water_demand',
+        'is_nitrogen_fixer',
+        'is_cover_crop',
+        'root_depth',
+        'forage_or_market_value',
+        'profitability',
+    ];
+
+    protected $casts = [
+        'is_nitrogen_fixer' => 'boolean',
+        'is_cover_crop'     => 'boolean',
+    ];
+
+    // ده السطر الناقص: بيخلّي display_name يطلع مع المحصول لما يتحول JSON
+    protected $appends = ['display_name'];
+
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->attributes['name_ar'] ?? $this->attributes['name'] ?? '';
+    }
 
     // المزارع التي تزرع هذا المحصول حالياً
     public function farms(): HasMany

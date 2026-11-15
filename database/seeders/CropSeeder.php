@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema; // أضفنا هذا السطر
+use Illuminate\Support\Facades\Schema;
 
 class CropSeeder extends Seeder
 {
@@ -21,26 +21,26 @@ class CropSeeder extends Seeder
 
         $crops = [
             // ---------------- Winter Crops ----------------
-            ['name' => 'Wheat', 'botanical_family' => 'Poaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'medium'],
-            ['name' => 'Egyptian Clover', 'botanical_family' => 'Fabaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => true, 'is_cover_crop' => true, 'root_depth' => 'medium', 'forage_or_market_value' => 'Forage', 'profitability' => 'medium'],
-            ['name' => 'Faba Bean', 'botanical_family' => 'Fabaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => true, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'medium'],
-            ['name' => 'Sugar Beet', 'botanical_family' => 'Amaranthaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
-            ['name' => 'Onion', 'botanical_family' => 'Amaryllidaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
-            ['name' => 'Garlic', 'botanical_family' => 'Amaryllidaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
-            ['name' => 'Potato', 'botanical_family' => 'Solanaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
-            ['name' => 'Tomato', 'botanical_family' => 'Solanaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Wheat', 'name_ar' => 'قمح', 'botanical_family' => 'Poaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'medium'],
+            ['name' => 'Egyptian Clover', 'name_ar' => 'برسيم مصري', 'botanical_family' => 'Fabaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => true, 'is_cover_crop' => true, 'root_depth' => 'medium', 'forage_or_market_value' => 'Forage', 'profitability' => 'medium'],
+            ['name' => 'Faba Bean', 'name_ar' => 'فول بلدي', 'botanical_family' => 'Fabaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => true, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'medium'],
+            ['name' => 'Sugar Beet', 'name_ar' => 'بنجر السكر', 'botanical_family' => 'Amaranthaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Onion', 'name_ar' => 'بصل', 'botanical_family' => 'Amaryllidaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Garlic', 'name_ar' => 'ثوم', 'botanical_family' => 'Amaryllidaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Potato', 'name_ar' => 'بطاطس', 'botanical_family' => 'Solanaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Tomato', 'name_ar' => 'طماطم', 'botanical_family' => 'Solanaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
 
             // ---------------- Summer Crops ----------------
-            ['name' => 'Rice', 'botanical_family' => 'Poaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'medium'],
-            ['name' => 'Maize', 'botanical_family' => 'Poaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Dual', 'profitability' => 'medium'],
-            ['name' => 'Cotton', 'botanical_family' => 'Malvaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
-            ['name' => 'Sorghum', 'botanical_family' => 'Poaceae', 'water_demand' => 'low', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Dual', 'profitability' => 'low'],
-            ['name' => 'Soybean', 'botanical_family' => 'Fabaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => true, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Dual', 'profitability' => 'high'],
-            ['name' => 'Peanut', 'botanical_family' => 'Fabaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => true, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
-            ['name' => 'Sesame', 'botanical_family' => 'Pedaliaceae', 'water_demand' => 'low', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Rice', 'name_ar' => 'أرز', 'botanical_family' => 'Poaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'shallow', 'forage_or_market_value' => 'Market', 'profitability' => 'medium'],
+            ['name' => 'Maize', 'name_ar' => 'ذرة شامية', 'botanical_family' => 'Poaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Dual', 'profitability' => 'medium'],
+            ['name' => 'Cotton', 'name_ar' => 'قطن', 'botanical_family' => 'Malvaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Sorghum', 'name_ar' => 'ذرة رفيعة', 'botanical_family' => 'Poaceae', 'water_demand' => 'low', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Dual', 'profitability' => 'low'],
+            ['name' => 'Soybean', 'name_ar' => 'فول صويا', 'botanical_family' => 'Fabaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => true, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Dual', 'profitability' => 'high'],
+            ['name' => 'Peanut', 'name_ar' => 'فول سوداني', 'botanical_family' => 'Fabaceae', 'water_demand' => 'medium', 'is_nitrogen_fixer' => true, 'is_cover_crop' => false, 'root_depth' => 'medium', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
+            ['name' => 'Sesame', 'name_ar' => 'سمسم', 'botanical_family' => 'Pedaliaceae', 'water_demand' => 'low', 'is_nitrogen_fixer' => false, 'is_cover_crop' => false, 'root_depth' => 'deep', 'forage_or_market_value' => 'Market', 'profitability' => 'high'],
 
             // ---------------- Perennial / Reclamation Crops ----------------
-            ['name' => 'Alfalfa', 'botanical_family' => 'Fabaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => true, 'is_cover_crop' => true, 'root_depth' => 'deep', 'forage_or_market_value' => 'Forage', 'profitability' => 'high'],
+            ['name' => 'Alfalfa', 'name_ar' => 'برسيم حجازي', 'botanical_family' => 'Fabaceae', 'water_demand' => 'high', 'is_nitrogen_fixer' => true, 'is_cover_crop' => true, 'root_depth' => 'deep', 'forage_or_market_value' => 'Forage', 'profitability' => 'high'],
         ];
 
         $now = now();

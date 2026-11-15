@@ -97,7 +97,7 @@ main { flex: 1; display: flex; align-items: center; justify-content: center; pad
           <!-- DB Loop -->
           @if(isset($crops))
             @foreach($crops as $crop)
-              <option value="{{ $crop->id }}" {{ old('currentCrop') == $crop->id ? 'selected' : '' }}>{{ $crop->name }}</option>
+              <option value="{{ $crop->id }}" {{ old('currentCrop') == $crop->id ? 'selected' : '' }}>{{ $crop->display_name  }}</option>
             @endforeach
           @endif
         </select>
