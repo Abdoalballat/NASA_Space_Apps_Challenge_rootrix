@@ -10,27 +10,45 @@ use App\Models\Crop;
 class DecisionEngineService
 {
     /**
-     * توليد الاستراتيجيات الثلاثة بناءً على بيانات المزرعة وتقرير ناسا
+     * توليد الاستراتيجيات الأربعة: الوضع الحالي + 3 بدائل
      */
     public function generate(Farm $farm, Report $report)
     {
         $strategies = [];
 
-        // 1. تقييم الدورة الحالية (Current Strategy)
+        // 1. تقييم الدورة الحالية
         $strategies[] = $this->evaluateCurrentSituation($farm, $report);
 
-        // جلب أولويات الفلاح (أول أولويتين على الأقل)
-        $priorities = $farm->priorities->pluck('name')->toArray();
-        $primaryPriority = $priorities[0] ?? 'Water Conservation';
-        $secondaryPriority = $priorities[1] ?? 'Soil Fertility & Nitrogen Fixation';
+        // 2. الأولويات بالترتيب (من غير تكرار)
+        $targets = $this->resolvePriorityTargets($farm);
 
-        // 2. توليد البديل الأول (بناءً على الأولوية الأولى)
-        $strategies[] = $this->buildAlternativeStrategy($farm, $report, 'alt_1', $primaryPriority);
-
-        // 3. توليد البديل الثاني (بناءً على الأولوية الثانية أو استدامة التربة)
-        $strategies[] = $this->buildAlternativeStrategy($farm, $report, 'alt_2', $secondaryPriority);
+        // 3. البدائل الثلاثة
+        $strategies[] = $this->buildAlternativeStrategy($farm, $report, 'alt_1', $targets[0]);
+        $strategies[] = $this->buildAlternativeStrategy($farm, $report, 'alt_2', $targets[1]);
+        $strategies[] = $this->buildAlternativeStrategy($farm, $report, 'alt_3', $targets[2]);
 
         return $strategies;
+    }
+
+    /**
+     * أولويات الفلاح الأول بالترتيب، ولو اختار أقل من 3 نكمّل من الافتراضي
+     * من غير ما أولوية تتكرر في خطتين
+     */
+    public function resolvePriorityTargets(Farm $farm): array
+    {
+        $chosen = $farm->priorities->pluck('name');
+
+        $fallbacks = collect([
+            'Water Conservation',
+            'Soil Fertility & Nitrogen Fixation',
+            'Income Maximization',
+            'Balanced',
+        ])->reject(function ($fallback) use ($chosen) {
+            $keyword = explode(' ', $fallback)[0]; // Water / Soil / Income / Balanced
+            return $chosen->contains(fn ($name) => str_contains($name, $keyword));
+        });
+
+        return $chosen->merge($fallbacks)->take(3)->values()->all();
     }
 
     /**
@@ -43,7 +61,7 @@ class DecisionEngineService
 
         if ($currentCrop) {
             if ($currentCrop->water_demand === 'high' && $report->precipitation_mm < 300) {
-                $warnings[] = "المحصول يستهلك مياه بكثافة في منطقة تعاني من قلة الأمطار الجافة.";
+                $warnings[] = "المحصول يستهلك مياه بكثافة في منطقة تعاني من قلة الأمطار.";
             }
             if ($report->avg_temp_anomaly > 0.5) {
                 $warnings[] = "ارتفاع درجات الحرارة المتزايد قد يؤثر على إنتاجية هذا المحصول مستقبلاً.";
@@ -68,53 +86,64 @@ class DecisionEngineService
     }
 
     /**
-     * بناء استراتيجية بديلة ذكية
+     * بناء استراتيجية بديلة
      */
     private function buildAlternativeStrategy(Farm $farm, Report $report, $type, $priorityTarget)
     {
-        // تجهيز الـ Query للبحث عن المحاصيل المناسبة
         $query = Crop::query();
 
-        // توجيه محرك البحث بناءً على الأولوية
-        if (str_contains($priorityTarget, 'Income Maximization')) {
+        if (str_contains($priorityTarget, 'Income')) {
             $query->where('profitability', 'high');
             $rationale = 'تم تصميم هذه الدورة لتحقيق أعلى عائد مادي (محاصيل نقدية) لمواجهة التحديات الاقتصادية.';
-        } elseif (str_contains($priorityTarget, 'Water Conservation')) {
+        } elseif (str_contains($priorityTarget, 'Water')) {
             $query->where('water_demand', 'low');
             $rationale = 'هذه الدورة تركز على زراعة محاصيل تتحمل الجفاف لترشيد استهلاك المياه في ظل نقص الأمطار.';
-        } elseif (str_contains($priorityTarget, 'Soil Fertility')) {
+        } elseif (str_contains($priorityTarget, 'Soil')) {
             $query->where('is_nitrogen_fixer', true);
             $rationale = 'دورة زراعية علاجية تستخدم البقوليات لتثبيت النيتروجين وإعادة الخصوبة للتربة المجهدة.';
         } else {
-            // افتراضي (توازن)
-            $query->where('is_cover_crop', true)->orWhere('profitability', 'medium');
+            // متوازنة (الأقواس مهمة عشان الـ orWhere ما يبوظش أي شرط بعده)
+            $query->where(fn ($q) => $q->where('is_cover_crop', true)->orWhere('profitability', 'medium'));
             $rationale = 'دورة زراعية متوازنة تحافظ على التربة وتوفر دخلاً مستقراً.';
         }
 
-        // جلب محصولين مختلفين العائلة (لكسر دورة الآفات) لتكوين التعاقب
-        $crop1 = $query->inRandomOrder()->first(); 
-        
-        // المحصول الثاني يجب أن يكون من عائلة نباتية مختلفة عن المحصول الأول
-        $crop2 = Crop::where('id', '!=', $crop1->id)
-                    ->where('botanical_family', '!=', $crop1->botanical_family)
-                    ->inRandomOrder()
-                    ->first();
+        // المحصول الأول (ولو الفلتر ما لقاش حاجة نجيب أي محصول بدل ما الكود يقع)
+        $crop1 = $query->inRandomOrder()->first() ?? Crop::inRandomOrder()->first();
 
-        // حفظ الاستراتيجية في الداتابيز
+        // المحصول الثاني من عائلة نباتية مختلفة (لكسر دورة الآفات)
+        $crop2 = $crop1
+            ? Crop::where('id', '!=', $crop1->id)
+                ->where('botanical_family', '!=', $crop1->botanical_family)
+                ->inRandomOrder()
+                ->first()
+            : null;
+
         $strategy = Strategy::create([
             'report_id'           => $report->id,
             'strategy_type'       => $type,
             'why_suggested'       => $rationale,
             'supporting_evidence' => 'بيانات ناسا توضح أن المنطقة مؤهلة مناخياً لهذه المحاصيل مع تقليل الإجهاد البيئي.',
-            'expected_benefits'   => 'كسر دورة الآفات لاختلاف العوائل النباتية، وتحقيق أولويتك في: ' . $priorityTarget,
+            'expected_benefits'   => 'كسر دورة الآفات لاختلاف العوائل النباتية، وتحقيق أولويتك في: ' . $this->priorityLabelAr($priorityTarget),
             'information_gaps'    => 'تحتاج للتحقق من أسعار السوق المحلية الحالية قبل بدء الزراعة.',
             'local_review_risks'  => 'تأكد من ملاءمة معدات الحصاد المتوفرة لديك لهذه المحاصيل الجديدة.',
         ]);
 
-        // ربط المحاصيل بالاستراتيجية بالترتيب (تسلسل الدورة الزراعية)
         if ($crop1) $strategy->crops()->attach($crop1->id, ['sequence_order' => 1]);
         if ($crop2) $strategy->crops()->attach($crop2->id, ['sequence_order' => 2]);
 
         return $strategy;
+    }
+
+    /**
+     * اسم الأولوية بالعربي للعرض للفلاح
+     */
+    private function priorityLabelAr(string $priority): string
+    {
+        return match (true) {
+            str_contains($priority, 'Income') => 'تعظيم الدخل',
+            str_contains($priority, 'Water')  => 'توفير المياه',
+            str_contains($priority, 'Soil')   => 'خصوبة التربة وتثبيت النيتروجين',
+            default                            => 'التوازن بين الدخل والتربة',
+        };
     }
 }

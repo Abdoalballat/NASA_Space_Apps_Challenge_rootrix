@@ -92,10 +92,13 @@ public function analyze(Request $request)
     // د) كل خطة اتبنت على أنهي أولوية (نفس اللي استعمله محرك القرار بالظبط)
     $priorityNames = $farm->priorities->pluck('name')->values();
 
-    $strategyPriority = [
-        'alt_1' => $priorityNames[0] ?? 'Water Conservation',
-        'alt_2' => $priorityNames[1] ?? 'Soil Fertility & Nitrogen Fixation',
-    ];
+$targets = $this->decisionEngine->resolvePriorityTargets($farm);
+
+$strategyPriority = [
+    'alt_1' => $targets[0],
+    'alt_2' => $targets[1],
+    'alt_3' => $targets[2],
+];
 
     return view('results', compact('analysisData', 'strategies', 'strategyPriority'));
 }

@@ -23,8 +23,8 @@ main { flex: 1; padding-bottom: 60px; }
 .summary-header { background: var(--white); padding: 30px 40px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 40px; box-shadow: 0 10px 30px #002F3705; display: flex; justify-content: space-between; align-items: center; gap: 30px; }
 .summary-info h1 { font-size: 26px; margin-bottom: 8px; } .summary-info p { color: #666; font-size: 14px; } .summary-info p strong { color: var(--primary); }
 .nasa-stats-grid { display: flex; gap: 15px; } .nasa-stat-box { background: #fdfcf9; border: 1px solid #f2ece4; padding: 15px 20px; border-radius: 12px; text-align: center; min-width: 110px; } .nasa-stat-box i { font-size: 18px; color: var(--olive); margin-bottom: 8px; } .nasa-stat-box.alert-box { background: #fff5f5; border-color: #ffe3e3; } .nasa-stat-box.alert-box i { color: var(--danger); } .nasa-stat-box h4 { font-size: 20px; font-weight: 800; margin-bottom: 3px; direction: ltr; } .nasa-stat-box span { font-size: 11px; color: #7f8c8d; font-weight: 600; }
-.strategies-title { font-size: 24px; margin: 0 0 25px; font-weight: 800; } .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-.strategy-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 35px 30px; position: relative; transition: 0.3s; display: flex; flex-direction: column; } .strategy-card:hover { border-color: var(--sage); transform: translateY(-5px); box-shadow: 0 15px 35px #002F370a; }
+.strategies-title { font-size: 24px; margin: 0 0 25px; font-weight: 800; } .grid-3 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.strategy-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 35px 24px; position: relative; transition: 0.3s; display: flex; flex-direction: column; } .strategy-card:hover { border-color: var(--sage); transform: translateY(-5px); box-shadow: 0 15px 35px #002F370a; }
 .card-badge { position: absolute; top: 25px; left: 25px; padding: 6px 15px; border-radius: 30px; font-size: 11px; font-weight: 700; } .badge-current { background: #f1f2f6; color: #57606f; } .badge-income { background: #fef9e7; color: #f39c12; } .badge-water { background: #e0f7fa; color: #0097a7; } .badge-soil { background: #eafaf1; color: #167208; } .badge-balanced { background: #f3eefc; color: #7d5ba6; }
 .card-icon { font-size: 35px; color: var(--primary); margin-bottom: 20px; } .strategy-card h3 { font-size: 20px; margin-bottom: 10px; line-height: 1.4; } .strategy-card > p { font-size: 13px; color: #666; line-height: 1.8; margin-bottom: 25px; flex-grow: 1; }
 .cycle-box { background: #f8f9fa; padding: 15px 20px; border-radius: 12px; border: 1px dashed #dcdde1; margin-bottom: 25px; } .cycle-box span { display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 5px; } .cycle-box strong { font-size: 15px; color: var(--primary); font-weight: 700;} .cycle-arrow { color: var(--sage); margin: 0 8px; display: inline !important; }
@@ -32,7 +32,7 @@ main { flex: 1; padding-bottom: 60px; }
 .select-btn { width: 100%; margin-top: auto; padding: 16px; border: 1px solid var(--primary); background: transparent; color: var(--primary); border-radius: 40px; font-weight: 700; font-size: 14px; transition: 0.3s; } .select-btn:hover, .strategy-card.recommended .select-btn { background: var(--primary); color: var(--white); }
 .pros-cons { margin-bottom: 30px; }
 .strategy-card.recommended { border: 2px solid var(--sage); background-color: #fafdf9; } .recommended-tag { position: absolute; top: -14px; right: 30px; background: var(--sage); color: var(--primary); padding: 6px 18px; border-radius: 20px; font-size: 12px; font-weight: 800; box-shadow: 0 4px 10px rgba(126, 222, 86, 0.3); }
-@media(max-width: 992px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } } @media(max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } .summary-header { flex-direction: column; text-align: right; align-items: flex-start; padding: 20px; } .nasa-stats-grid { flex-wrap: wrap; width: 100%; } .nasa-stat-box { flex: 1; min-width: 45%; } .navbar { height: auto; min-height: 65px; padding: 12px 20px; border-radius: 25px; } .nav-actions { gap: 8px; } .outline-btn, .map-btn { padding: 8px 14px; font-size: 11px; } }
+@media(max-width: 1200px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } } @media(max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } .summary-header { flex-direction: column; text-align: right; align-items: flex-start; padding: 20px; } .nasa-stats-grid { flex-wrap: wrap; width: 100%; } .nasa-stat-box { flex: 1; min-width: 45%; } .navbar { height: auto; min-height: 65px; padding: 12px 20px; border-radius: 25px; } .nav-actions { gap: 8px; } .outline-btn, .map-btn { padding: 8px 14px; font-size: 11px; } }
 @media(max-width: 480px) { .navbar { flex-direction: column; gap: 12px; border-radius: 20px; padding: 15px; } .nav-actions { width: 100%; justify-content: center; } }
 </style>
 </head>
@@ -99,7 +99,7 @@ main { flex: 1; padding-bottom: 60px; }
 
     <div class="grid-3" id="strategies-container">
 
-      @foreach (['current', 'alt_1', 'alt_2'] as $type)
+      @foreach (['current', 'alt_1', 'alt_2', 'alt_3'] as $type)
         @php $strategy = $strategies->firstWhere('strategy_type', $type); @endphp
         @continue(!$strategy)
 
@@ -124,7 +124,7 @@ main { flex: 1; padding-bottom: 60px; }
             <span>{{ $type === 'current' ? 'الدورة المعتادة:' : 'الدورة المقترحة:' }}</span>
             <strong>
               @forelse ($strategy->crops as $crop)
-                {{ $crop->name_ar }}
+                {{ $crop->display_name }}
                 @if (!$loop->last)
                   <span class="cycle-arrow">←</span>
                 @endif
